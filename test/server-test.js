@@ -74,6 +74,17 @@ describe('Server', function () {
         });
       });
 
+      it('should redirect the user to their new pizza', (done) => {
+        var payload = { pizza: fixtures.validPizza };
+
+        this.request.post('/pizzas', { form: payload }, (error, response) => {
+          if (error) { done(error); }
+          var newPizzaId = Object.keys(app.locals.pizzas)[0];
+          assert.equal(response.headers.location, '/pizzas/' + newPizzaId);
+          done();
+        });
+      });    
+
     });
 
     describe('GET /pizzas/:id', () => {
@@ -88,6 +99,18 @@ describe('Server', function () {
           if (error) { done(error); }
           assert(response.body.includes(pizza.name),
                  `"${response.body}" does not include "${pizza.name}".`);
+          done();
+        });
+      });
+
+      it('display pizz toppings', (done) => {
+        var pizza = app.locals.pizzas.testPizza;
+
+        this.request.get('/pizzas/testPizza', (error, response) => {
+          if (error) { done(error); }
+          assert(response.body.includes(pizza.toppings[0]),
+                 `"${response.body}" does not include "${pizza.toppings}".`);
+          assert(response.body.includes(pizza.toppings[1]));
           done();
         });
       });

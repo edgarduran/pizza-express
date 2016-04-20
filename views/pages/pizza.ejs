@@ -7,5 +7,12 @@
   <body>
     <h1><%= title %></h1>
     <h1><%= pizza.name %></h1>
+    <ul>
+      <% pizza.toppings.forEach(function(topping) { %>
+        <li>
+          <%= topping %>
+        </li>
+      <%  });  %>
+    </ul>
   </body>
 </html>
